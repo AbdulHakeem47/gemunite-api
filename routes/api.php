@@ -1,8 +1,18 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\auth\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/auth/login', 'login');
+    Route::get('/auth/user', 'user');
+    Route::post('/auth/logout', 'logout');
+});
+
+
+Route::prefix('admin')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/users', function () { });
+    });
+});
